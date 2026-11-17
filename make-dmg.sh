@@ -45,6 +45,7 @@ echo "==> Creating DMG…"
 STAGING="$(mktemp -d)"
 trap 'rm -rf "$STAGING"' EXIT
 ditto "$APP" "$STAGING/$APP_NAME.app"
+rm -rf "$APP"   # don't leave a second copy around for Spotlight / "Open With"
 ln -s /Applications "$STAGING/Applications"
 mkdir -p "$DIST_DIR"
 rm -f "$DMG"

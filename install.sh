@@ -11,10 +11,13 @@ xcodebuild -project MarkdownViewer.xcodeproj -scheme MarkdownViewer -configurati
 APP="/Applications/MarkdownViewer.app"
 pkill -x MarkdownViewer 2>/dev/null || true
 rm -rf "$APP"
-cp -R "$BUILD_DIR"/Build/Products/Release/MarkdownViewer.app "$APP"
+BUILT="$BUILD_DIR/Build/Products/Release/MarkdownViewer.app"
+ditto "$BUILT" "$APP"
 
+# Remove the build copy so only /Applications shows up in Spotlight and "Open With".
 LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
-"$LSREGISTER" -u "$BUILD_DIR/Build/Products/Release/MarkdownViewer.app" 2>/dev/null || true
+"$LSREGISTER" -u "$BUILT" 2>/dev/null || true
+rm -rf "$BUILT"
 "$LSREGISTER" -f "$APP"
 
 # Make it the default app for Markdown files.
